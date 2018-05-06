@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>sticky</title>
+  <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .topBar {
+      width: 100%;
+      background: rgba(0, 0, 255, 0.5);
+      color: white;
+      height: 30px
+    }
+
+    .anotherBar {
+      width: 100%;
+      background: rgba(255, 0, 0, 0.5);
+      color: white;
+      height: 30px;
+    }
+
+    .sticky {
+      position: fixed;
+    }
+
+    .longP {
+      height: 2000px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class='topBar'>topBar</div>
+  <div class='main'>
+    <p>段落1</p>
+    <p>段落2</p>
+    <p>段落3</p>
+    <p>段落4</p>
+    <p>段落5</p>
+    <p>段落6</p>
+    <p>段落7</p>
+    <p>段落8</p>
+    <p>段落9</p>
+    <p>段落10</p>
+    <div class='anotherBar'>anotherBar</div>
+    <p class="longP">very long paragraph</p>
+  </div>
+  <script>
+    class Sticky {
+      constructor(elements, top) {
+        this.$elements = $(elements)
+        this.top = top || 0
+        this.wrapStickyElement()
+        this.initialOffset()
+        this.listenToScroll()
+      }
+      initialOffset() {
+        this.offset = []
+        this.$elements.each((index, item) => {
+          this.offset.push($(item).offset().top)
+        })
+      }
+      wrapStickyElement() {
+        this.$elements.each((index, item) => {
+          $(item).wrap("<div class='wrapSticky'></div>")
+          $(item).parent().css({ 'height': $(item).height() + 'px' })
+        })
+      }
+      listenToScroll() {
+        $(window).scroll(() => {
+          this.$elements.each((index, item) => {
+            if ($(window).scrollTop() >= this.offset[index] - this.top) {
+              $(item).addClass('sticky')
+                .css({ 'top': this.top + 'px' })
+            } else {
+              $(item).removeClass('sticky')
+            }
+          })
+        })
+      }
+    }
+
+    new Sticky('.topBar')
+    new Sticky('.anotherBar', 30)
+  </script>
+</body>
+
+</html>

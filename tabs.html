@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+  <title>JS Bin</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .tabs li {
+      list-style: none;
+      border: 1px solid red;
+    }
+
+    .tab {
+      display: flex
+    }
+
+    .tab>li.active {}
+
+    .tab>li {
+      width: 100px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+    }
+
+    .tab>li.active {
+      background: #ccc;
+      color: white;
+    }
+
+
+    .content>li {
+      display: none
+    }
+
+    .content li.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="tabs" id="myTab">
+    <ul class='tab'>
+      <li>tab1</li>
+      <li>tab2</li>
+    </ul>
+    <ul class="content">
+      <li>content1</li>
+      <li>content2</li>
+    </ul>
+  </div>
+  <div class="tabs" id="myTab2">
+    <ul class='tab'>
+      <li>tab1</li>
+      <li>tab2</li>
+    </ul>
+    <ul class="content">
+      <li>content1</li>
+      <li>content2</li>
+    </ul>
+  </div>
+  <script>
+    class Tab {
+      constructor(el) {
+        this.$el = $(el)
+        this.bindEvents()
+        this.init()
+      }
+      init() {
+        this.$el.each((index, element) => {
+          $(element).find('.tab>li').eq(0).addClass('active')
+          $(element).find('.content>li').eq(0).addClass('active')
+        })
+      }
+      bindEvents() {
+        this.$el.on('click', '.tab>li', function (e) {
+          $(this).addClass('active').siblings().removeClass('active')
+          let index = $(this).index()
+          let $content = $(this).parents('.tabs').children('.content').children('li')
+          $content.eq(index).addClass('active').siblings().removeClass('active')
+        })
+      }
+    }
+
+
+    var tab = new Tab('.tabs')
+  </script>
+</body>
+
+</html>

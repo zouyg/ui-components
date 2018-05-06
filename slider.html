@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>slider</title>
+  <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .zouygSlides {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .zouygSlides ol {
+      list-style: none;
+      display: flex;
+      transition: transform 0.5s
+    }
+
+    .zouygSlides-prev {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      padding: 2px 5px
+    }
+
+    .zouygSlides-next {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      padding: 2px 5px
+    }
+  </style>
+</head>
+
+<body>
+  <div class="slides">
+    <ol>
+      <li>
+        <img src="https://i.loli.net/2018/01/03/5a4c93e92b0e1.png">
+      </li>
+      <li>
+        <img src="https://i.loli.net/2018/01/03/5a4c93e931f93.png">
+      </li>
+      <li>
+        <img src="https://i.loli.net/2018/01/03/5a4c93e938b6b.png">
+      </li>
+    </ol>
+  </div>
+  <script>
+    class Slide {
+      constructor(options) {
+        this.options = options
+        this.$el = $(this.options.element)
+        this.$el.addClass('zouygSlides')
+        this.initHtml()
+        this.bindEvents()
+        this.timer = null
+        this.go(0)
+        if (this.options.autoPlay) {
+          this.play()
+        }
+        this.slideAmount = this.$el.find('li').length
+      }
+      initHtml() {
+        this.width = this.$el.find('li').width()
+        this.$el.width(this.width)
+        this.$prev = $('<button class="zouygSlides-prev">prev</button>')
+        this.$next = $('<button class="zouygSlides-next">next</button>')
+        this.$el.append(this.$prev)
+        this.$el.append(this.$next)
+      }
+      bindEvents() {
+        this.$prev.click(() => this.prev())
+        this.$next.click(() => this.next())
+        this.$el.on('mouseover', () => this.stop())
+          .on('mouseleave', () => this.play())
+      }
+      go(index) {
+        let $ol = this.$el.children('ol')
+
+        if (index >= this.slideAmount) {
+          index = 0
+        } else if (index < 0) {
+          index = this.slideAmount - 1
+        }
+        $ol.css({'transform': `translateX(${-index * this.width}px)`, 'transition-duration': '0.5s'})
+        this.curIndex = index
+      }
+      prev() {
+        this.go(this.curIndex - 1)
+      }
+      next() {
+        this.go(this.curIndex + 1)
+      }
+      play() {
+        this.timer = setInterval(() => {
+          this.next()
+        }, 2000)
+      }
+      stop() {
+        clearInterval(this.timer)
+      }
+    }
+
+    var slide = new Slide({
+      element: '.slides',
+      autoPlay: true
+    })
+  </script>
+</body>
+
+</html>

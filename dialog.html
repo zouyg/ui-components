@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+  <title>dialog</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    /* .mask {
+  position: fixed;
+  top:0;
+  left: 0
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  z-index: 1;
+} */
+
+    .dialogWrap {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: 2;
+    }
+
+    .dialog {
+      width: 300px;
+      border: 1px solid #999;
+      /* box-shadow: 2px 2px 5px white; */
+      background: white;
+    }
+
+    .dialog-title {
+      background: #aaa;
+      color: white;
+      padding: 5px 20px;
+    }
+
+    .dialog-content {
+      padding: 40px 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 1px solid #eee
+    }
+
+    .dialog-footer {
+      text-align: right;
+    }
+
+    .dialog-footer>button {
+      margin: 5px 15px;
+      height: 25px;
+      line-height: 25px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <button class='btn'>show Dialog</button>
+  <script>
+    class Dialog {
+      constructor(options) {
+        this.options = options
+        this.init()
+      }
+      get template() {
+        console.log(this.options)
+        let { title, content } = this.options
+        return `
+      <div class='dialogWrap'>
+        <div class=dialog>
+          <div class='dialog-title'>${title}</div>
+          <div class='dialog-content'>${content}</div>
+          <div class='dialog-footer'></div>
+        </div>
+      </div>
+    `
+      }
+      generateBtns() {
+        let { buttons } = this.options
+        let btns = buttons.map(btnOption => {
+          let $btn = $(`<button>${btnOption.text}</button>`)
+          $btn.on('click', btnOption.callBack)
+          return $btn
+        })
+        return btns
+      }
+      init() {
+        var $dialog = $(this.template)
+        $dialog.find('.dialog-footer').append(this.generateBtns())
+        $dialog.addClass()
+        this.$dialog = $dialog
+      }
+      open() {
+        this.$dialog.appendTo('body')
+      }
+      close() {
+        this.$dialog.detach()
+      }
+    }
+
+    $('.btn').click(function () {
+      var dialog = new Dialog({
+        title: 'this is the title',
+        content: 'this is the content',
+        buttons: [{
+          text: '确认',
+          callBack: function () {
+            setTimeout(function () {
+              dialog.close()
+            }, 3000)
+          }
+        }, {
+          text: '取消',
+          callBack: function () {
+            dialog.close()
+          }
+        }]
+      })
+      dialog.open()
+    })
+  </script>
+</body>
+
+</html>
