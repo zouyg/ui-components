@@ -99,19 +99,18 @@
         if (this.curIndex === this.slideAmount - 1 && index === 0) {
           // debugger
           $ol.css({ transform: `translateX(${-(this.slideAmount+1) * this.width}px)` })
-            .one('transitionend', function () {
+            .one('transitionend', () => {
               $ol.hide().offset() // .offset() 可以触发 re-layout，这是一个高级技术，删掉这行你就会发现 bug，所以只能加上这一行。
               // 不要写邮件来问我为什么要写 .offset，你自己注释掉上面一行看最后一张到第一张的动画，就知道为什么要加 offset() 了。
-              $ol.css({ transform: `translateX(-400px)` }).show()
-              // $ol.css({ transform: `translateX(${-(index+1) * this.width}px)` }).show()
+              $ol.css({ transform: `translateX(${-(index+1) * this.width}px)` }).show()
             })
         //第一张到最后一张
         } else if (this.curIndex === 0 && index === this.slideAmount - 1){
           // debugger
           $ol.css({ transform: `translateX(0px)` })
-            .one('transitionend', function () {
+            .one('transitionend', () => {
               $ol.hide().offset()
-              $ol.css({ transform: `translateX(${-(index+1) * 400}px)` }).show()
+              $ol.css({ transform: `translateX(${-(index+1) * this.width}px)` }).show()
             })
         } else {
           // debugger
